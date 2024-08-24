@@ -1,7 +1,7 @@
-import type { Metadata } from 'next'
-import './globals.css'
-import Link from 'next/link'
 import { House } from 'lucide-react'
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import './globals.css'
 
 export const metadata: Metadata = {
   title: 'J-Blog Example',
@@ -20,15 +20,13 @@ export default function RootLayout({
             <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
               <Link
                 href="/"
-                className="flex items-center justify-center space-x-2"
+                className="flex items-center justify-center space-x-2 transition-colors hover:text-orange-400"
               >
                 <div className="flex items-center gap-2 text-lg font-semibold md:text-base">
                   <House className="h-6 w-6" />
                   <span className="sr-only">Acme Inc</span>
                 </div>
-                <div className="text-foreground transition-colors hover:text-foreground">
-                  Home
-                </div>
+                <div>Home</div>
               </Link>
             </nav>
           </header>

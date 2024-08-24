@@ -8,10 +8,10 @@ export default function Home() {
         Hello World
       </div>
       <div className="flex items-center justify-center">
-        <Button variant="link">
+        <Button variant={'link'}>
           <Link
             href={'/signin'}
-            className="text-xl text-orange-400"
+            className="text-xl"
           >
             Sign In
           </Link>
