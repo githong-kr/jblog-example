@@ -1,5 +1,6 @@
-import Link from 'next/link'
+'use client'
 
+import { CustomDialog } from '@/components/custom/dialog'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -10,61 +11,126 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { DialogControl, initialValue } from '../signup/page'
+
+type FormValues = {
+  email: string
+  password: string
+}
 
 export default function LoginForm() {
+  const [dialogControl, setDialogControl] =
+    useState<DialogControl>(initialValue)
+  const router = useRouter()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>()
+
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    try {
+      const response = await fetch('/api/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        // 로그인 성공 시, 메인 페이지로 리다이렉트
+        router.push('/')
+      } else {
+        // 에러 처리
+        const successDialogControl: DialogControl = {
+          isSuccess: false,
+          title: '로그인을 못 했어요! 🥹',
+          description: '이메일이나 비밀번호를 확인해 주세요.',
+          buttonMessage: '네, 알겠어요.',
+        }
+        setDialogControl(successDialogControl)
+        console.error('User registration failed')
+      }
+    } catch (error) {
+      console.error('An unexpected error occurred:', error)
+    }
+  }
+
+  const handleAction = () => {
+    setDialogControl(initialValue)
+  }
+
   return (
-    <Card className="w-96">
-      <CardHeader>
-        <CardTitle className="text-2xl">로그인</CardTitle>
-        <CardDescription>
-          로그인 하시려면 이메일을 입력해 주세요!
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-10">
-          <div className="grid gap-2">
-            <Label htmlFor="email">이메일</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="m@example.com"
-              required
-            />
-          </div>
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">비밀번호</Label>
-              <Link
-                href="#"
-                className="ml-auto inline-block text-sm underline"
+    <>
+      <Card className="w-96">
+        <CardHeader>
+          <CardTitle className="text-2xl">로그인</CardTitle>
+          <CardDescription>
+            로그인 하시려면 이메일을 입력해 주세요!
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="grid gap-10">
+              <div className="grid gap-2">
+                <Label htmlFor="email">이메일</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="m@example.com"
+                  {...register('email', { required: '이메일을 입력하세요' })}
+                />
+                {errors.email && (
+                  <span className="text-red-500">{errors.email.message}</span>
+                )}
+              </div>
+              <div className="grid gap-2">
+                <div>
+                  <Label htmlFor="password">비밀번호</Label>
+                </div>
+                <Input
+                  id="password"
+                  type="password"
+                  {...register('password', {
+                    required: '비밀번호를 입력하세요',
+                  })}
+                />
+                {errors.password && (
+                  <span className="text-red-500">
+                    {errors.password.message}
+                  </span>
+                )}
+              </div>
+              <Button
+                type="submit"
+                className="w-full"
               >
-                이메일을 잃어버리셨나요?
-              </Link>
+                로그인
+              </Button>
             </div>
-            <Input
-              id="password"
-              type="password"
-              required
-            />
+          </form>
+          <div className="mt-4 text-center text-sm">
+            아이디가 없으신가요?{' '}
+            <Link
+              href="signup"
+              className="underline"
+            >
+              회원가입
+            </Link>
           </div>
-          <Button
-            type="submit"
-            className="w-full"
-          >
-            로그인
-          </Button>
-        </div>
-        <div className="mt-4 text-center 
-        text-sm">
-          아이디가 없으신가요?{'   '}
-          <Link
-            href="signup"
-            className="underline"
-          >
-            회원가입
-          </Link>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+      <CustomDialog
+        dialogControl={dialogControl}
+        handleAction={handleAction}
+      />
+    </>
   )
 }
