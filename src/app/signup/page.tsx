@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { CustomDialog } from '@/components/custom/dialog'
+import Loader from '@/components/custom/loader'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -41,6 +42,7 @@ export const initialValue: DialogControl = {
 export default function LoginForm() {
   const [dialogControl, setDialogControl] =
     useState<DialogControl>(initialValue)
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const {
     register,
@@ -49,6 +51,7 @@ export default function LoginForm() {
   } = useForm<FormValues>()
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    setLoading(true)
     try {
       const response = await fetch('/api/signup', {
         method: 'POST',
@@ -82,6 +85,7 @@ export default function LoginForm() {
     } catch (error) {
       console.error('An unexpected error occurred:', error)
     }
+    setLoading(false)
   }
 
   const handleAction = () => {
@@ -166,10 +170,11 @@ export default function LoginForm() {
                 )}
               </div>
               <Button
+                disabled={loading}
                 type="submit"
                 className="w-full"
               >
-                이메일 만들기
+                {loading ? <Loader /> : '이메일 만들기'}
               </Button>
             </div>
           </form>
