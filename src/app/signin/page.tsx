@@ -45,8 +45,8 @@ export default function LoginForm() {
       const result = await response.json()
 
       if (result.success) {
-        // 로그인 성공 시, 메인 페이지로 리다이렉트
-        router.push('/')
+        // 로그인 성공 시, 비밀 페이지로 리다이렉트
+        router.push('/secret')
       } else {
         // 에러 처리
         const successDialogControl: DialogControl = {

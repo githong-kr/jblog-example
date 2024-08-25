@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <div className="flex min-h-screen w-full flex-col">
-          <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+          <header className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
             <nav>
               <Link
                 href="/"
@@ -30,7 +30,7 @@ export default function RootLayout({
               </Link>
             </nav>
           </header>
-          <div className="flex h-screen items-center justify-center">
+          <div className="flex flex-1 items-center justify-center pt-16">
             {children}
           </div>
         </div>

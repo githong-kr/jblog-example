@@ -17,6 +17,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "jose": "^5.7.0",
     "lucide-react": "^0.435.0",
     "mssql": "^11.0.1",
     "next": "14.2.6",

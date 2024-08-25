@@ -1,5 +1,9 @@
 import { connectToDatabase } from '@/db/mssql'
+import { SignJWT } from 'jose'
 import { NextRequest, NextResponse } from 'next/server'
+
+// JWT KEY
+const SECRET_KEY = new TextEncoder().encode(process.env.JWT_KEY)
 
 export async function POST(req: NextRequest) {
   try {
@@ -36,7 +40,17 @@ export async function POST(req: NextRequest) {
     }
 
     // 로그인 성공 시
-    return NextResponse.json({ success: true, message: 'Login successful' })
+    const token = await new SignJWT({ email })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setExpirationTime('1h')
+      .sign(SECRET_KEY)
+    const res = NextResponse.json({
+      success: true,
+      message: 'Login successful',
+    })
+    res.cookies.set('auth-token', token, { httpOnly: true })
+
+    return res
   } catch (error) {
     console.error('Login failed:', error)
     return NextResponse.json(
