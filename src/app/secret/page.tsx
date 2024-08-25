@@ -74,8 +74,8 @@ export default function SecretPage() {
         <Card>
           <CardHeader className="gap-2">
             <CardTitle>비밀 페이지 😎</CardTitle>
-            <CardDescription>
-              이 페이지는 로그인된 사용자만 접근할 수 있어요 🎉🎉
+            <CardDescription className="break-words">
+              여기는 로그인된 사용자만 접근할 수 있는 비밀 공간이에요 🎉🎉
             </CardDescription>
           </CardHeader>
           <CardContent>
