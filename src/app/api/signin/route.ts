@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
     // 로그인 성공 시
     const token = await new SignJWT({ email })
       .setProtectedHeader({ alg: 'HS256' })
-      .setExpirationTime('1h')
+      .setExpirationTime('5m')
       .sign(SECRET_KEY)
     const res = NextResponse.json({
       success: true,
