@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { initialValue } from '@/lib/iv'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -30,13 +31,6 @@ export type DialogControl = {
   title: string
   description: string
   buttonMessage: string
-}
-
-export const initialValue: DialogControl = {
-  isSuccess: null,
-  title: '',
-  description: '',
-  buttonMessage: '',
 }
 
 export default function LoginForm() {

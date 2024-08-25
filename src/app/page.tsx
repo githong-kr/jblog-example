@@ -43,6 +43,14 @@ export default function Home() {
       <div className="flex items-center justify-center">
         <Button variant={'link'}>
           <Link
+            href={'/secret'}
+            className="text-xl"
+          >
+            Get Secret
+          </Link>
+        </Button>
+        <Button variant={'link'}>
+          <Link
             href={'/signin'}
             className="text-xl"
           >
