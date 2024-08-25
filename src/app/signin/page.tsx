@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { DialogControl, initialValue } from '../signup/page'
 
@@ -27,6 +27,7 @@ export default function LoginForm() {
   const [dialogControl, setDialogControl] =
     useState<DialogControl>(initialValue)
   const [loading, setLoading] = useState(false)
+  const [signinSeccess, setSigninSuccess] = useState(false)
   const router = useRouter()
   const {
     register,
@@ -36,6 +37,7 @@ export default function LoginForm() {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setLoading(true)
+    setSigninSuccess(false)
     try {
       const response = await fetch('/api/signin', {
         method: 'POST',
@@ -49,7 +51,7 @@ export default function LoginForm() {
 
       if (result.success) {
         // 로그인 성공 시, 비밀 페이지로 리다이렉트
-        router.push('/secret')
+        setSigninSuccess(true)
       } else {
         // 에러 처리
         const successDialogControl: DialogControl = {
@@ -67,6 +69,12 @@ export default function LoginForm() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (signinSeccess) {
+      router.push('/secret') // 로그인 성공 시 리다이렉트
+    }
+  }, [signinSeccess, router])
 
   const handleAction = () => {
     setDialogControl(initialValue)

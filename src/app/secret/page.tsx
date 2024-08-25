@@ -1,5 +1,6 @@
 'use client'
 
+import Loader from '@/components/custom/loader'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -9,17 +10,37 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function SecretPage() {
   const router = useRouter()
+  const [loading, setLoading] = useState(true)
 
   const buttonHandler = () => {
     router.push('/')
   }
 
   useEffect(() => {
+    const verifyUser = async () => {
+      try {
+        const response = await fetch('/api/verify')
+        if (response.ok) {
+          setLoading(false)
+        } else {
+          router.push('/signin')
+        }
+      } catch (error) {
+        router.push('/signin')
+      }
+    }
+
+    verifyUser()
+  }, [router])
+
+  useEffect(() => {
     const canvas = document.getElementById('matrixCanvas') as HTMLCanvasElement
+    if (!canvas) return
+
     const ctx = canvas.getContext('2d')!
 
     // 캔버스 크기 업데이트 함수
@@ -62,7 +83,11 @@ export default function SecretPage() {
       clearInterval(interval) // 컴포넌트 언마운트 시 애니메이션 정리
       window.removeEventListener('resize', updateCanvasSize) // 리스너 정리
     }
-  }, [])
+  }, [loading])
+
+  if (loading) {
+    return <Loader />
+  }
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">

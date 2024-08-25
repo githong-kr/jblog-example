@@ -5,6 +5,9 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'J-Blog Example',
+  icons: {
+    icon: '/pills.png',
+  },
 }
 
 export default function RootLayout({
