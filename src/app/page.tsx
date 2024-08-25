@@ -1,5 +1,6 @@
 'use client'
 
+import Loader from '@/components/custom/loader'
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -8,12 +9,11 @@ import {
 } from '@/components/ui/tooltip'
 import { TooltipArrow, TooltipTrigger } from '@radix-ui/react-tooltip'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function Home() {
   const [isHovered, setIsHovered] = useState(true)
-  const router = useRouter()
+  const [loading, setLoading] = useState(false)
 
   const handleMouseEnter = () => {
     setIsHovered(false)
@@ -25,12 +25,15 @@ export default function Home() {
 
   const handleSignOut = () => {
     const signout = async () => {
+      setLoading(true)
       await fetch('/api/signout', {
         headers: {
           'Content-Type': 'application/json',
         },
       })
+      setLoading(false)
     }
+
     signout()
   }
 
@@ -54,7 +57,7 @@ export default function Home() {
         </Tooltip>
       </TooltipProvider>
 
-      <div className="flex items-center justify-center">
+      <div className="flex flex-col items-start justify-center space-y-5">
         <Button variant={'link'}>
           <Link
             href={'/secret'}
@@ -72,11 +75,12 @@ export default function Home() {
           </Link>
         </Button>
         <Button
+          disabled={loading}
           variant={'link'}
           className="text-xl"
           onClick={handleSignOut}
         >
-          Sign Out
+          {loading ? <Loader /> : 'Sign Out'}
         </Button>
       </div>
     </div>

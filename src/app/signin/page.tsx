@@ -38,7 +38,6 @@ export default function LoginForm() {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setLoading(true)
-    // setSigninSuccess(false)
     try {
       const response = await fetch('/api/signin', {
         method: 'POST',
@@ -52,7 +51,6 @@ export default function LoginForm() {
 
       if (result.success) {
         // 로그인 성공 시, 비밀 페이지로 리다이렉트
-        // setSigninSuccess(true)
         router.push('/secret')
       } else {
         // 에러 처리
@@ -64,18 +62,13 @@ export default function LoginForm() {
         }
         setDialogControl(successDialogControl)
         console.error('User registration failed')
+        setLoading(false)
       }
     } catch (error) {
       console.error('An unexpected error occurred:', error)
+      setLoading(false)
     }
-    setLoading(false)
   }
-
-  // useEffect(() => {
-  //   if (signinSeccess) {
-  //     router.push('/secret') // 로그인 성공 시 리다이렉트
-  //   }
-  // }, [signinSeccess, router])
 
   const handleAction = () => {
     setDialogControl(initialValue)
