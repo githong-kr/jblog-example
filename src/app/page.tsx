@@ -8,10 +8,12 @@ import {
 } from '@/components/ui/tooltip'
 import { TooltipArrow, TooltipTrigger } from '@radix-ui/react-tooltip'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function Home() {
   const [isHovered, setIsHovered] = useState(true)
+  const router = useRouter()
 
   const handleMouseEnter = () => {
     setIsHovered(false)
@@ -20,6 +22,18 @@ export default function Home() {
   const handleMouseLeave = () => {
     setIsHovered(true)
   }
+
+  const handleSignOut = () => {
+    const signout = async () => {
+      await fetch('/api/signout', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+    }
+    signout()
+  }
+
   return (
     <div className="flex flex-col space-y-10">
       <TooltipProvider>
@@ -56,6 +70,13 @@ export default function Home() {
           >
             Sign In
           </Link>
+        </Button>
+        <Button
+          variant={'link'}
+          className="text-xl"
+          onClick={handleSignOut}
+        >
+          Sign Out
         </Button>
       </div>
     </div>
